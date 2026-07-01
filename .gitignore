@@ -1,0 +1,97 @@
+# Python
+*.py[cod]
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+.eggs/
+.Python
+env/
+venv/
+ENV/
+
+# Django
+*.log
+*.pot
+*.pyc
+db.sqlite3
+/media/
+/staticfiles/
+
+# VS Code
+.vscode/
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyd
+*.pyo
+*.pyd
+*.pdb
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+.eggs/
+.eggs-info/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+
+# Django stuff:
+local_settings.py
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# environment variables
+.env
