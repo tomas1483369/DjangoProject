@@ -1,8 +1,9 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
 from django.db.models import F, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+
+from usuarios.decorators import admin_required
 
 from .forms import ProductoForm
 from .models import Producto
@@ -16,7 +17,7 @@ def superuser_required(view_func):
     return user_passes_test(is_superuser, login_url='usuarios:login')(view_func)
 
 
-@superuser_required
+@admin_required
 def crear_producto(request):
     form = ProductoForm(request.POST or None, request.FILES or None)
     if request.method == 'POST' and form.is_valid():
@@ -26,7 +27,7 @@ def crear_producto(request):
     return render(request, 'producto_form.html', {'form': form, 'title': 'Crear producto'})
 
 
-@superuser_required
+@admin_required
 def editar_producto(request, pk):
     producto = get_object_or_404(Producto, pk=pk)
     form = ProductoForm(request.POST or None, request.FILES or None, instance=producto)
@@ -37,7 +38,7 @@ def editar_producto(request, pk):
     return render(request, 'producto_form.html', {'form': form, 'title': 'Editar producto'})
 
 
-@superuser_required
+@admin_required
 def eliminar_producto(request, pk):
     producto = get_object_or_404(Producto, pk=pk)
     producto.estado = False

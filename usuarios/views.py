@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.db.models import Q
@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from productos.models import Producto
-
+from .decorators import admin_required
 from .forms import UsuarioRegisterForm, UsuarioUpdateForm
 
 
@@ -60,7 +60,7 @@ class UsuarioLoginView(LoginView):
         return super().form_valid(form)
 
 
-@superuser_required
+@admin_required
 def crear_usuario(request):
     form = UsuarioRegisterForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
@@ -70,7 +70,7 @@ def crear_usuario(request):
     return render(request, 'usuarios/usuario_form.html', {'form': form, 'title': 'Crear usuario'})
 
 
-@superuser_required
+@admin_required
 def editar_usuario(request, pk):
     usuario = get_object_or_404(User, pk=pk)
     form = UsuarioUpdateForm(request.POST or None, instance=usuario)
@@ -81,7 +81,7 @@ def editar_usuario(request, pk):
     return render(request, 'usuarios/usuario_form.html', {'form': form, 'title': 'Editar usuario'})
 
 
-@superuser_required
+@admin_required
 def eliminar_usuario(request, pk):
     usuario = get_object_or_404(User, pk=pk)
     if usuario != request.user:
