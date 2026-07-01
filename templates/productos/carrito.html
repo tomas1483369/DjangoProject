@@ -3,20 +3,89 @@
 {% block title %}Carrito{% endblock %}
 
 {% block content %}
-<div class="row gy-4 mb-4">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
-            <div>
-                <h1 class="h4 mb-1">Carrito</h1>
-                <p class="text-muted">Revisa tus productos seleccionados antes de finalizar.</p>
+<div class="container-cart">
+    {% if items %}
+        <div class="grid-cart">
+            <div class="card cart-card">
+                <label class="title">CHECKOUT</label>
+                <div class="steps">
+                    <div class="step">
+                        <div>
+                            <span>SHIPPING</span>
+                            <p>Dirección guardada</p>
+                            <p>Colombia</p>
+                        </div>
+                        <hr>
+                        <div>
+                            <span>PAYMENT METHOD</span>
+                            <p>Tarjeta</p>
+                            <p>**** **** **** 4243</p>
+                        </div>
+                        <hr>
+                        <div class="payments">
+                            <span>PAYMENT</span>
+                            <div class="details">
+                                <span>Subtotal:</span>
+                                <span>${{ total_amount|floatformat:2 }}</span>
+                                <span>Envío:</span>
+                                <span>$0.00</span>
+                                <span>Impuestos:</span>
+                                <span>$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card items-card">
+                <label class="title">Tus Productos</label>
+                <div class="items-list">
+                    {% for item in items %}
+                        <div class="cart-item-card">
+                            <div class="cart-item-image-wrapper">
+                                {% if item.product.imagen %}
+                                    <img src="{{ item.product.imagen.url }}" alt="{{ item.product.nombre }}" class="cart-item-image">
+                                {% else %}
+                                    <div class="cart-item-image cart-item-placeholder">📦</div>
+                                {% endif %}
+                            </div>
+                            <div class="cart-item-details">
+                                <span class="cart-item-name">{{ item.product.nombre }}</span>
+                                <span class="cart-item-code">{{ item.product.codigo }}</span>
+                                <span class="cart-item-price">${{ item.product.precio|floatformat:2 }}</span>
+                            </div>
+                            <div class="cart-item-meta">
+                                <span class="cart-item-quantity">x{{ item.quantity }}</span>
+                                <span class="cart-item-subtotal">${{ item.subtotal|floatformat:2 }}</span>
+                                <form method="post" class="remove-item-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="remove">
+                                    <input type="hidden" name="product_id" value="{{ item.product.pk }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-light remove-btn">Eliminar</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="footer-checkout">
+                    <div class="checkout-total">
+                        <span class="total-label">Total a pagar</span>
+                        <span class="price">${{ total_amount|floatformat:2 }}</span>
+                    </div>
+                    <a href="#" class="checkout-btn">Checkout</a>
+                </div>
             </div>
         </div>
-        <div class="card border-secondary bg-dark text-white shadow-sm p-4">
-            <div class="text-center py-5">
-                <div class="display-4">🛒</div>
-                <p class="text-muted mb-0">El carrito está vacío por ahora.</p>
+    {% else %}
+        <div class="card cart-card empty-card">
+            <label class="title">Carrito vacío</label>
+            <div class="steps">
+                <div class="step">
+                    <p class="text-muted">No has agregado productos aún. Navega el catálogo y añade tus favoritos.</p>
+                    <a href="{% url 'productos:catalogo' %}" class="checkout-btn">Volver al catálogo</a>
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 </div>
 {% endblock %}

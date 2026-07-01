@@ -10,10 +10,17 @@
             <form method="post" novalidate>
                 {% csrf_token %}
                 {% for field in form %}
-                    <label>
-                        {{ field.as_widget(attrs={'class': 'input', 'placeholder': ' '}) }}
-                        <span>{{ field.label }}</span>
-                    </label>
+                    {% if field.field.widget.input_type == 'checkbox' %}
+                        <div class="form-check mb-3">
+                            {{ field }}
+                            <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        </div>
+                    {% else %}
+                        <label>
+                            {{ field }}
+                            <span>{{ field.label }}</span>
+                        </label>
+                    {% endif %}
                     {% if field.errors %}
                         <div class="text-danger small mt-1">
                             {% for error in field.errors %}{{ error }}{% if not forloop.last %}<br>{% endif %}{% endfor %}

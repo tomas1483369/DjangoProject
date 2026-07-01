@@ -6,31 +6,46 @@
 <div class="row justify-content-center">
     <div class="col-12 col-md-10 col-lg-8">
         <div class="form">
-            <p class="title">Register</p>
-            <p class="message">Signup now and get full access to our app.</p>
+            <p class="title">Crear cuenta</p>
+            <p class="message">Regístrate para acceder al panel de inventario.</p>
             <form method="post" novalidate>
                 {% csrf_token %}
                 <div class="flex">
                     <label>
                         {{ form.username }}
                         <span>Usuario</span>
+                        {% for error in form.username.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
                     </label>
                     <label>
                         {{ form.email }}
                         <span>Correo electrónico</span>
+                        {% for error in form.email.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
                     </label>
                 </div>
                 <label>
                     {{ form.password1 }}
                     <span>Contraseña</span>
+                    {% for error in form.password1.errors %}
+                        <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
                 </label>
+                <div class="form-text text-muted mb-2">Mínimo 8 caracteres, incluyendo letras y números.</div>
                 <label>
                     {{ form.password2 }}
                     <span>Confirmar contraseña</span>
+                    {% for error in form.password2.errors %}
+                        <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
                 </label>
                 {% if form.non_field_errors %}
                     <div class="alert alert-danger mt-2">
-                        {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
                     </div>
                 {% endif %}
                 <button class="submit" type="submit">Registrarme</button>

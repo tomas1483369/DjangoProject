@@ -35,7 +35,9 @@
         <div class="card border-secondary bg-dark text-white shadow-sm p-4">
             <h5 class="mb-3">Detalles</h5>
             <p class="mb-2"><strong>Código:</strong> {{ product.codigo }}</p>
-            <p class="mb-2"><strong>Categoría:</strong> {{ product.categoria }}</p>
+            {% if product.categoria %}
+                <p class="mb-2"><strong>Categoría:</strong> {{ product.categoria }}</p>
+            {% endif %}
             <p class="mb-2"><strong>Disponible:</strong> {{ product.cantidad }}</p>
             <p class="mb-2"><strong>Estado:</strong>
                 {% if product.cantidad == 0 %}
@@ -46,6 +48,22 @@
                     <span class="badge bg-success">Disponible</span>
                 {% endif %}
             </p>
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="cantidad" class="form-label">Cantidad</label>
+                    <input type="number" name="cantidad" id="cantidad" value="1" min="1" max="{{ product.cantidad }}" class="form-control bg-dark text-white border-secondary">
+                </div>
+                <button type="submit" class="submit w-100" {% if product.cantidad == 0 %}disabled{% endif %}>
+                    Añadir al carrito
+                </button>
+            </form>
+            <div class="d-grid gap-2 mt-3">
+                {% if request.user.is_superuser %}
+                    <a href="{% url 'productos:editar_producto' product.pk %}" class="btn btn-outline-light">Editar producto</a>
+                {% endif %}
+                <a href="{% url 'productos:catalogo' %}" class="btn btn-secondary">Volver al catálogo</a>
+            </div>
         </div>
     </div>
 </div>

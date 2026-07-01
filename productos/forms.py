@@ -32,6 +32,7 @@ class ProductoForm(forms.ModelForm):
         fields = [
             'nombre',
             'codigo',
+            'categoria',
             'imagen',
             'descripcion',
             'precio',
@@ -41,28 +42,32 @@ class ProductoForm(forms.ModelForm):
         ]
         widgets = {
             'nombre': forms.TextInput(
-                attrs={'class': 'form-control bg-secondary text-white border-secondary'}
+                attrs={'class': 'input', 'placeholder': ' ', 'autocomplete': 'off'}
             ),
             'codigo': forms.TextInput(
-                attrs={'class': 'form-control bg-secondary text-white border-secondary'}
+                attrs={'class': 'input', 'placeholder': ' ', 'autocomplete': 'off'}
+            ),
+            'categoria': forms.TextInput(
+                attrs={'class': 'input', 'placeholder': ' ', 'autocomplete': 'off'}
             ),
             'imagen': forms.FileInput(
-                attrs={'class': 'form-control bg-secondary text-white border-secondary'}
+                attrs={'class': 'input file-input'}
             ),
             'descripcion': forms.Textarea(
                 attrs={
-                    'class': 'form-control bg-secondary text-white border-secondary',
+                    'class': 'input',
+                    'placeholder': ' ',
                     'rows': 4,
                 }
             ),
             'precio': forms.NumberInput(
-                attrs={'class': 'form-control bg-secondary text-white border-secondary', 'step': '0.01'}
+                attrs={'class': 'input', 'placeholder': ' ', 'step': '0.01'}
             ),
             'cantidad': forms.NumberInput(
-                attrs={'class': 'form-control bg-secondary text-white border-secondary'}
+                attrs={'class': 'input', 'placeholder': ' '}
             ),
             'stock_minimo': forms.NumberInput(
-                attrs={'class': 'form-control bg-secondary text-white border-secondary'}
+                attrs={'class': 'input', 'placeholder': ' '}
             ),
             'estado': forms.CheckboxInput(
                 attrs={'class': 'form-check-input'}

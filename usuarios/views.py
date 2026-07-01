@@ -1,12 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
-from django.shortcuts import redirect, render
+from django.contrib.auth.views import LoginView
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from productos.models import Producto
 
-from .forms import UsuarioRegisterForm
+from .forms import UsuarioRegisterForm, UsuarioUpdateForm
 
 
 @login_required(login_url='usuarios:login')
@@ -23,10 +25,72 @@ def dashboard(request):
     })
 
 
+def is_superuser(user):
+    return user.is_authenticated and user.is_superuser
+
+
+def superuser_required(view_func):
+    return user_passes_test(is_superuser, login_url='usuarios:login')(view_func)
+
+
 @login_required(login_url='usuarios:login')
 def lista_usuarios(request):
-    users = User.objects.filter(is_active=True).order_by('username')
-    return render(request, 'usuarios/lista_usuarios.html', {'users': users})
+    query = request.GET.get('q', '').strip()
+    status = request.GET.get('status', 'all')
+    users = User.objects.order_by('username')
+    if query:
+        users = users.filter(Q(username__icontains=query) | Q(email__icontains=query))
+    if status == 'active':
+        users = users.filter(is_active=True)
+    elif status == 'inactive':
+        users = users.filter(is_active=False)
+    return render(request, 'usuarios/lista_usuarios.html', {
+        'users': users,
+        'query': query,
+        'status': status,
+    })
+
+
+class UsuarioLoginView(LoginView):
+    template_name = 'registration/login.html'
+    redirect_authenticated_user = True
+
+    def form_valid(self, form):
+        messages.success(self.request, f'Bienvenido de nuevo, {self.request.user.username}!')
+        return super().form_valid(form)
+
+
+@superuser_required
+def crear_usuario(request):
+    form = UsuarioRegisterForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Usuario creado correctamente.')
+        return redirect(reverse('usuarios:lista_usuarios'))
+    return render(request, 'usuarios/usuario_form.html', {'form': form, 'title': 'Crear usuario'})
+
+
+@superuser_required
+def editar_usuario(request, pk):
+    usuario = get_object_or_404(User, pk=pk)
+    form = UsuarioUpdateForm(request.POST or None, instance=usuario)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Usuario actualizado correctamente.')
+        return redirect(reverse('usuarios:lista_usuarios'))
+    return render(request, 'usuarios/usuario_form.html', {'form': form, 'title': 'Editar usuario'})
+
+
+@superuser_required
+def eliminar_usuario(request, pk):
+    usuario = get_object_or_404(User, pk=pk)
+    if usuario != request.user:
+        usuario.is_active = False
+        usuario.save(update_fields=['is_active'])
+        messages.success(request, 'Usuario desactivado correctamente.')
+    else:
+        messages.error(request, 'No puedes desactivar tu propia cuenta.')
+    return redirect(reverse('usuarios:lista_usuarios'))
 
 
 def register(request):
@@ -40,11 +104,3 @@ def register(request):
         return redirect(reverse('usuarios:login'))
 
     return render(request, 'registration/register.html', {'form': form})
-
-
-def is_superuser(user):
-    return user.is_authenticated and user.is_superuser
-
-
-def superuser_required(view_func):
-    return user_passes_test(is_superuser, login_url='usuarios:login')(view_func)

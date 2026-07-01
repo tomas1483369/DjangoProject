@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -37,6 +39,7 @@ class UsuarioRegisterForm(UserCreationForm):
     password1 = forms.CharField(
         label='Contraseña',
         strip=False,
+        help_text='Mínimo 8 caracteres, al menos una letra y un número.',
         widget=forms.PasswordInput(
             attrs={
                 'class': 'input',
@@ -66,6 +69,15 @@ class UsuarioRegisterForm(UserCreationForm):
         if User.objects.filter(email__iexact=email).exists():
             raise forms.ValidationError('Este correo ya está registrado.')
         return email
+
+    def clean_password1(self):
+        password1 = self.cleaned_data.get('password1')
+        if password1:
+            if len(password1) < 8:
+                raise forms.ValidationError('La contraseña debe tener al menos 8 caracteres.')
+            if not re.search(r'[A-Za-z]', password1) or not re.search(r'\d', password1):
+                raise forms.ValidationError('La contraseña debe incluir letras y números.')
+        return password1
 
     def save(self, commit=True):
         user = super().save(commit=False)

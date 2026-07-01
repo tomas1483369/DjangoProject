@@ -21,6 +21,12 @@ class Producto(models.Model):
         unique=True,
         validators=[validar_codigo_producto],
     )
+    categoria = models.CharField(
+        max_length=80,
+        blank=True,
+        default='General',
+        verbose_name='Categoría',
+    )
     imagen = models.ImageField(upload_to='productos/', blank=True, null=True)
     descripcion = models.TextField(blank=True)
     precio = models.DecimalField(

@@ -20,12 +20,6 @@
                         <a href="{% url 'usuarios:lista_usuarios' %}" class="sidebar-link">Usuarios</a>
                     </nav>
                 </div>
-                <div class="sidebar-footer">
-                    <a href="{% url 'productos:carrito' %}" class="sidebar-link sidebar-link-bottom">
-                        <span class="sidebar-icon">🛒</span>
-                        Carrito
-                    </a>
-                </div>
             </aside>
         {% endif %}
         <div class="main-shell">
@@ -67,6 +61,12 @@
             </main>
         </div>
     </div>
+    {% if user.is_authenticated %}
+        <a href="{% url 'productos:carrito' %}" class="floating-cart" title="Ver carrito">🛒</a>
+    {% endif %}
+    {% if request.resolver_match.url_name == 'dashboard' %}
+        <a href="https://wa.me/573045968336" target="_blank" rel="noopener" class="dashboard-whatsapp" title="Contactar por WhatsApp">💬</a>
+    {% endif %}
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/app.js' %}"></script>
     {% block scripts %}{% endblock %}

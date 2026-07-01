@@ -7,33 +7,97 @@
     <div class="col-12 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
         <div>
             <h1 class="h4">Usuarios</h1>
-            <p class="text-muted">Lista de cuentas registradas dentro del sistema.</p>
+            <p class="text-muted">Gestiona cuentas activas y desactivadas desde aquí.</p>
         </div>
-        <div>
-            <a href="{% url 'productos:catalogo' %}" class="btn btn-outline-light">Volver al catálogo</a>
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <div class="text-muted">Total: <strong>{{ users|length }}</strong></div>
+            {% if request.user.is_superuser %}
+                <a href="{% url 'usuarios:crear_usuario' %}" class="btn btn-primary btn-lg">Crear usuario</a>
+            {% endif %}
         </div>
     </div>
 </div>
-<div class="row gy-4">
-    {% if users %}
-        {% for user in users %}
-            <div class="col-md-4">
-                <div class="card h-100 border-secondary bg-dark text-white shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ user.username }}</h5>
-                        <p class="card-text text-muted mb-2">{{ user.email|default:'Sin correo registrado' }}</p>
-                        <p class="card-text mb-3">Registrado el {{ user.date_joined|date:'d M Y' }}</p>
-                        <span class="badge bg-success">Activo</span>
-                    </div>
+<div class="row gy-3 mb-4">
+    <div class="col-12">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-secondary border-secondary text-white">🔍</span>
+                    <input type="search" name="q" value="{{ query|default:'' }}" class="form-control bg-dark text-white border-secondary" placeholder="Buscar usuario o correo">
                 </div>
             </div>
-        {% endfor %}
-    {% else %}
-        <div class="col-12">
+            <div class="col-md-4">
+                <select name="status" class="form-select bg-dark text-white border-secondary">
+                    <option value="all" {% if status == 'all' %}selected{% endif %}>Todos</option>
+                    <option value="active" {% if status == 'active' %}selected{% endif %}>Activos</option>
+                    <option value="inactive" {% if status == 'inactive' %}selected{% endif %}>Inactivos</option>
+                </select>
+            </div>
+            <div class="col-md-auto">
+                <button type="submit" class="btn btn-outline-light" aria-label="Buscar usuarios">🔎</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% if not request.user.is_superuser %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="alert alert-warning" role="alert">
+            Solo los administradores pueden editar o desactivar usuarios.
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="row gy-4">
+    <div class="col-12">
+        {% if users %}
+            <div class="table-responsive shadow-sm rounded overflow-hidden">
+                <table class="table table-dark table-borderless mb-0 align-middle users-table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Email</th>
+                            <th>Registrado</th>
+                            <th>Estado</th>
+                            {% if request.user.is_superuser %}
+                                <th class="text-end">Acciones</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold">{{ user.username }}</div>
+                                </td>
+                                <td>{{ user.email|default:'Sin correo registrado' }}</td>
+                                <td>{{ user.date_joined|date:'d M Y' }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="status-dot {% if user.is_active %}bg-success{% else %}bg-secondary{% endif %}"></span>
+                                        <span class="badge {% if user.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                            {% if user.is_active %}Activo{% else %}Inactivo{% endif %}
+                                        </span>
+                                    </div>
+                                </td>
+                                {% if request.user.is_superuser %}
+                                    <td class="text-end">
+                                        <div class="d-flex gap-2 flex-wrap justify-content-end">
+                                            <a href="{% url 'usuarios:editar_usuario' user.pk %}" class="btn btn-sm btn-outline-light">Editar</a>
+                                            <a href="{% url 'usuarios:eliminar_usuario' user.pk %}" class="btn btn-sm btn-danger">Desactivar</a>
+                                        </div>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
             <div class="alert alert-info" role="alert">
                 No hay usuarios activos registrados.
             </div>
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
