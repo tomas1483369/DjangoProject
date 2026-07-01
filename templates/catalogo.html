@@ -4,13 +4,14 @@
 
 {% block content %}
 <div class="row gy-4 mb-3">
-    <div class="col-12 d-flex justify-content-between align-items-center">
+    <div class="col-12 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
         <div>
             <h1 class="h4">Catálogo</h1>
-            <p class="text-muted">Productos disponibles para el carrito.</p>
+            <p class="text-muted">Productos disponibles para el inventario.</p>
         </div>
-        <div>
-            <a href="{% url 'productos:crear_producto' %}" class="btn btn-outline-light">Nuevo producto</a>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-outline-light">Ver usuarios</a>
+            <a href="{% url 'productos:crear_producto' %}" class="submit">Nuevo producto</a>
         </div>
     </div>
 </div>

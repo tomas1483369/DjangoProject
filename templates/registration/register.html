@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrar usuario{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+        <div class="form">
+            <p class="title">Register</p>
+            <p class="message">Signup now and get full access to our app.</p>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="flex">
+                    <label>
+                        {{ form.username }}
+                        <span>Usuario</span>
+                    </label>
+                    <label>
+                        {{ form.email }}
+                        <span>Correo electrónico</span>
+                    </label>
+                </div>
+                <label>
+                    {{ form.password1 }}
+                    <span>Contraseña</span>
+                </label>
+                <label>
+                    {{ form.password2 }}
+                    <span>Confirmar contraseña</span>
+                </label>
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger mt-2">
+                        {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                    </div>
+                {% endif %}
+                <button class="submit" type="submit">Registrarme</button>
+                <p class="signin">¿Ya tienes cuenta? <a href="{% url 'usuarios:login' %}">Iniciar sesión</a></p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

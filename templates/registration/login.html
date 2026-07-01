@@ -4,31 +4,28 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-5">
-        <div class="card border-secondary bg-dark text-white shadow-sm">
-            <div class="card-body">
-                <h2 class="card-title mb-3">Iniciar sesión</h2>
-                <form method="post" novalidate>
-                    {% csrf_token %}
-                    {% if form.errors %}
-                        <div class="alert alert-danger" role="alert">
-                            Usuario o contraseña incorrectos.
-                        </div>
-                    {% endif %}
-                    <div class="mb-3">
-                        <label for="id_username" class="form-label">Usuario</label>
-                        <input type="text" name="username" autofocus maxlength="150" class="form-control bg-secondary text-white border-secondary" id="id_username" required>
+    <div class="col-12 col-md-10 col-lg-6">
+        <div class="form">
+            <p class="title">Sign in</p>
+            <p class="message">Enter your credentials to continue.</p>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% if form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        Usuario o contraseña incorrectos.
                     </div>
-                    <div class="mb-3">
-                        <label for="id_password" class="form-label">Contraseña</label>
-                        <input type="password" name="password" class="form-control bg-secondary text-white border-secondary" id="id_password" required>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <button class="btn btn-primary" type="submit">Ingresar</button>
-                        <a href="{% url 'productos:catalogo' %}" class="link-light">Ver catálogo</a>
-                    </div>
-                </form>
-            </div>
+                {% endif %}
+                <label>
+                    <input class="input" type="text" name="username" autofocus maxlength="150" placeholder=" " required>
+                    <span>Usuario</span>
+                </label>
+                <label>
+                    <input class="input" type="password" name="password" placeholder=" " required>
+                    <span>Contraseña</span>
+                </label>
+                <button class="submit" type="submit">Ingresar</button>
+                <p class="signin">¿No tienes cuenta? <a href="{% url 'usuarios:register' %}">Registrarse</a></p>
+            </form>
         </div>
     </div>
 </div>
