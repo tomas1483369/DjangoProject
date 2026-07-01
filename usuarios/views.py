@@ -9,6 +9,7 @@ from django.urls import reverse
 from productos.models import Producto
 from .decorators import admin_required
 from .forms import UsuarioRegisterForm, UsuarioUpdateForm
+from .services import AuthService
 
 
 @login_required(login_url='usuarios:login')
@@ -99,7 +100,8 @@ def register(request):
 
     form = UsuarioRegisterForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
-        form.save()
+        user = form.save()
+        AuthService.assign_default_role(user)
         messages.success(request, 'Cuenta creada. Inicia sesión para continuar.')
         return redirect(reverse('usuarios:login'))
 
