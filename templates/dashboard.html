@@ -9,7 +9,12 @@
             <div class="card border-0 bg-dark text-white shadow-lg p-6 dashboard-hero position-relative">
                 <h1 class="display-4 fw-bold mb-4">Bienvenido al catálogo de productos</h1>
                 <p class="lead text-muted mb-5">Gestiona tu stock en un solo lugar, revisa alertas de stock bajo y explora los productos más recientes del inventario.</p>
-                <a href="{% url 'productos:catalogo' %}" class="submit btn-lg">Explorar catálogo</a>
+                <div class="d-flex flex-column flex-sm-row gap-3">
+                    <a href="{% url 'productos:catalogo' %}" class="submit btn-lg">Explorar catálogo</a>
+                    {% if is_admin %}
+                        <a href="{% url 'productos:nuevo' %}" class="btn btn-outline-light btn-lg">Agregar producto</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

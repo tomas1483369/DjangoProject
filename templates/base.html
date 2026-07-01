@@ -33,7 +33,11 @@
                                     <span class="user-name">{{ user.username }}</span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end mt-2">
-                                    <li><a class="dropdown-item" href="{% url 'usuarios:lista_usuarios' %}">Usuarios</a></li>
+                                    {% if is_admin %}
+                                        <li><a class="dropdown-item" href="{% url 'usuarios:lista_usuarios' %}">Usuarios</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'productos:nuevo' %}">Nuevo producto</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                    {% endif %}
                                     <li><a class="dropdown-item" href="{% url 'productos:catalogo' %}">Catálogo</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item text-danger" href="{% url 'usuarios:logout' %}">Cerrar sesión</a></li>
