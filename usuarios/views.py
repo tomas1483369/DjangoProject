@@ -14,15 +14,20 @@ from .services import AuthService
 
 @login_required(login_url='usuarios:login')
 def dashboard(request):
+    total_users = User.objects.count()
     total_products = Producto.objects.activos().count()
     low_stock_products = Producto.objects.bajo_stock().count()
     out_of_stock_products = Producto.objects.agotados().count()
-    featured_products = Producto.objects.activos().order_by('-fecha_creacion')[:3]
+    latest_products = Producto.objects.activos().order_by('-fecha_creacion')[:4]
+    latest_users = User.objects.order_by('-date_joined')[:5]
+
     return render(request, 'dashboard.html', {
+        'total_users': total_users,
         'total_products': total_products,
         'low_stock_products': low_stock_products,
         'out_of_stock_products': out_of_stock_products,
-        'featured_products': featured_products,
+        'latest_products': latest_products,
+        'latest_users': latest_users,
     })
 
 
