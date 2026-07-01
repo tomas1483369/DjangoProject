@@ -1,0 +1,31 @@
+{% if items %}
+    {% for item in items %}
+        <div class="cart-item-card" data-product-id="{{ item.product.pk }}">
+            <div class="cart-item-image-wrapper">
+                {% if item.product.imagen %}
+                    <img src="{{ item.product.imagen.url }}" alt="{{ item.product.nombre }}" class="cart-item-image">
+                {% else %}
+                    <div class="cart-item-image cart-item-placeholder">📦</div>
+                {% endif %}
+            </div>
+            <div class="cart-item-details">
+                <span class="cart-item-name">{{ item.product.nombre }}</span>
+                <span class="cart-item-code">{{ item.product.codigo }}</span>
+                <span class="cart-item-price">${{ item.product.precio|floatformat:2 }}</span>
+            </div>
+            <div class="cart-item-meta">
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-outline-light update-quantity" data-action="decrease" data-product-id="{{ item.product.pk }}">-</button>
+                    <input type="number" min="1" max="{{ item.product.cantidad }}" value="{{ item.quantity }}" class="form-control form-control-sm cart-quantity-input" data-product-id="{{ item.product.pk }}" style="width: 5rem;">
+                    <button class="btn btn-sm btn-outline-light update-quantity" data-action="increase" data-product-id="{{ item.product.pk }}">+</button>
+                </div>
+                <span class="cart-item-subtotal">${{ item.subtotal|floatformat:2 }}</span>
+                <button type="button" class="btn btn-sm btn-outline-light remove-item" data-product-id="{{ item.product.pk }}">Eliminar</button>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-info" role="alert">
+        No hay productos en el carrito.
+    </div>
+{% endif %}

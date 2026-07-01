@@ -1,7 +1,11 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import F, Q
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 from usuarios.decorators import admin_required
 
@@ -56,6 +60,7 @@ def _save_cart(request, cart):
     request.session.modified = True
 
 
+@login_required(login_url='usuarios:login')
 def carrito(request):
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -93,6 +98,84 @@ def carrito(request):
         'items': items,
         'total_amount': total_amount,
         'total_quantity': total_quantity,
+    })
+
+
+@login_required(login_url='usuarios:login')
+@require_POST
+def carrito_api(request):
+    action = request.POST.get('action')
+    product_id = request.POST.get('product_id', '')
+    quantity = request.POST.get('quantity', '')
+    cart = _get_cart(request)
+
+    if action == 'clear':
+        cart = {}
+        _save_cart(request, cart)
+        items = []
+        total_amount = 0
+        total_quantity = 0
+        message = 'Carrito vaciado correctamente.'
+    else:
+        if not product_id.isdigit():
+            return JsonResponse({'success': False, 'message': 'Producto inválido.'}, status=400)
+
+        product = get_object_or_404(Producto, pk=int(product_id), estado=True)
+        if action == 'remove':
+            cart.pop(product_id, None)
+            message = 'Producto eliminado del carrito.'
+        elif action in ('update', 'add'):
+            try:
+                quantity = int(quantity)
+            except (TypeError, ValueError):
+                quantity = 1
+
+            if quantity < 1:
+                return JsonResponse({'success': False, 'message': 'La cantidad debe ser al menos 1.'}, status=400)
+            if quantity > product.cantidad:
+                return JsonResponse({'success': False, 'message': 'No hay suficiente stock disponible.'}, status=400)
+
+            if action == 'add':
+                cart[product_id] = min(cart.get(product_id, 0) + quantity, product.cantidad)
+                message = f'{product.nombre} agregado al carrito.'
+            else:
+                cart[product_id] = quantity
+                message = 'Cantidad actualizada correctamente.'
+        else:
+            return JsonResponse({'success': False, 'message': 'Acción inválida.'}, status=400)
+
+        if cart.get(product_id, 0) == 0:
+            cart.pop(product_id, None)
+
+        _save_cart(request, cart)
+
+        product_ids = [int(pid) for pid in cart.keys() if pid.isdigit()]
+        products = Producto.objects.filter(pk__in=product_ids)
+        items = []
+        total_amount = 0
+        total_quantity = 0
+        for product in products:
+            qty = cart.get(str(product.pk), 0)
+            subtotal = product.precio * qty
+            total_amount += subtotal
+            total_quantity += qty
+            items.append({
+                'product': product,
+                'quantity': qty,
+                'subtotal': subtotal,
+            })
+
+    request.session['cart'] = cart
+    request.session.modified = True
+
+    items_html = render_to_string('productos/cart_items_fragment.html', {'items': items}, request=request)
+    return JsonResponse({
+        'success': True,
+        'message': message,
+        'items_html': items_html,
+        'total_amount': float(total_amount),
+        'total_quantity': total_quantity,
+        'cart_empty': len(items) == 0,
     })
 
 

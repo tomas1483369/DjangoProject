@@ -333,8 +333,6 @@ hr {
   max-height: calc(100vh - 200px);
   overflow: hidden;
 }
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
 .users-table tbody tr:hover {
   background-color: rgba(255, 255, 255, 0.03);
 }
@@ -409,10 +407,36 @@ hr {
 }
 
 .dashboard-hero {
-  background-color: rgba(20, 20, 20, 0.95);
+  background-color: rgba(18, 18, 18, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 30px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+}
+
+.card.card-dark {
+  background-color: rgba(20, 20, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f8f9fa;
+}
+
+.dashboard-callout {
+  padding: 1rem 1.2rem;
+  border-radius: 18px;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f8f9fa;
+}
+
+.dashboard-callout strong {
+  color: #ffffff;
+}
+
+.dashboard-callout.warning {
+  border-left: 4px solid #ffc107;
+}
+
+.dashboard-callout.danger {
+  border-left: 4px solid #dc3545;
 }
 
 .form .form-check {
@@ -570,6 +594,27 @@ hr {
   justify-content: space-between;
   gap: 1.5rem;
   padding: 1.5rem;
+}
+
+.marketplace-card.low-stock {
+  border-color: #ffc107;
+}
+
+.marketplace-card.low-stock .marketplace-thumb {
+  box-shadow: inset 0 0 0 1px rgba(255, 193, 7, 0.18);
+}
+
+.marketplace-card.out-stock {
+  border-color: #dc3545;
+}
+
+.marketplace-card.out-stock .marketplace-thumb {
+  box-shadow: inset 0 0 0 1px rgba(220, 53, 69, 0.22);
+}
+
+.marketplace-card.out-stock .marketplace-tag,
+.marketplace-card.low-stock .marketplace-tag {
+  opacity: 0.95;
 }
 
 .marketplace-meta {

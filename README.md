@@ -1,53 +1,60 @@
 # Django Inventory Marketplace
 
-Proyecto académico de sistema de inventario estilo marketplace desarrollado con Django.
+Proyecto académico de inventario estilo marketplace desarrollado con Django.
 
 ## Visión general
 
-Este proyecto es una aplicación web de inventario con:
+Esta aplicación web combina gestión de productos, control de stock y carrito de compras en sesión para ofrecer una experiencia tipo marketplace.
 
-- Gestión de usuarios.
-- Catálogo de productos.
-- Carrito de compras en sesión.
-- Interfaz oscura con Bootstrap local.
-- Arquitectura MVT de Django.
+- Autenticación y administración de usuarios.
+- Catálogo de productos con filtros y búsqueda.
+- Dashboard de métricas y alertas de stock.
+- Carrito dinámico con soporte AJAX.
+- Interfaz oscura con Bootstrap 5 local.
 
 ## Estado actual
 
-El proyecto contiene dos aplicaciones principales:
+El proyecto cuenta con dos aplicaciones principales:
 
 - `usuarios`
 - `productos`
 
 ### Funcionalidades implementadas
 
-- Registro de usuarios.
-- Inicio y cierre de sesión.
-- Dashboard después del login.
-- Gestión básica de usuarios (lista, crear, editar, desactivar) restringida a superusuario.
+- Registro e inicio de sesión de usuarios.
+- Dashboard con métricas clave:
+  - total de usuarios
+  - productos activos
+  - stock bajo
+  - productos agotados
+- Gestión de usuarios restringida a administrador.
 - CRUD de productos con imagen, cantidad, stock mínimo, código y estado.
-- Catálogo público de productos con búsqueda y filtros de estado.
-- Detalle de producto y agregado al carrito.
-- Carrito de compras en sesión con visualización de ítems, total y eliminación.
-- Layout de interfaz con tema oscuro y navegación lateral.
+- Catálogo con búsqueda y filtros por estado de stock.
+- Detalle de producto y stock badge dinámico.
+- Carrito de compras en sesión con:
+  - actualización de cantidades
+  - eliminación de ítems
+  - vaciado completo
+  - recálculo de total en tiempo real
+- Carrito SPA usando Fetch API y respuesta parcial de plantilla.
 
-### Arquitectura actual
+### Validación y seguridad
 
-Se mantiene una separación básica:
+- Validaciones de formulario y modelo para:
+  - códigos de producto
+  - precios positivos
+  - cantidades válidas
+  - contraseñas complejas
+- Decoradores y servicios para administración de permisos.
+- Estado de productos con banderas de stock bajo / agotado.
 
-- `config/`: configuración del proyecto.
-- `usuarios/`: manejo de autenticación y administración de usuarios.
-- `productos/`: modelo de productos, catálogo y carrito.
-- `templates/`: vistas de frontend.
-- `static/`: recursos CSS y JavaScript.
+## Arquitectura actual
 
-También hay módulos preparados para:
-
-- `services.py`
-- `validators.py`
-- `managers.py`
-
-Estos archivos representan capas de servicio, validación y consultas personalizadas.
+- `config/`: configuración del proyecto y URLs.
+- `usuarios/`: autenticación, roles, administración y formularios.
+- `productos/`: modelos, formularios, vistas de catálogo y carrito.
+- `templates/`: diseño de frontend y fragmentos HTML.
+- `static/`: estilos y scripts del cliente.
 
 ## Estructura de carpetas
 
@@ -85,6 +92,7 @@ DjangoProject/
 │   │   └── register.html
 │   ├── productos/
 │   │   ├── carrito.html
+│   │   ├── cart_items_fragment.html
 │   │   ├── catalogo_cards.html
 │   │   └── producto_detalle.html
 │   └── usuarios/
@@ -112,18 +120,18 @@ DjangoProject/
 
 ## Notas importantes
 
-- Actualmente el proyecto usa Django 4.2.11 en `config/settings.py`.
-- `MEDIA_URL` y `MEDIA_ROOT` están configurados para manejo de imágenes de productos.
-- El carrito está basado en sesión y no usa pasarela de pago.
-- Algunos componentes de seguridad y permisos están aplicados, pero falta completar la estrategia de roles y autorizaciones con `Groups`.
+- `MEDIA_URL` y `MEDIA_ROOT` están configurados para imágenes de productos.
+- El carrito está basado en sesión y no incluye pasarela de pago.
+- Se usa AJAX para actualizar el carrito sin recargar la página.
+- La estrategia de permisos se apoya en decoradores y está lista para extenderse con `Groups`.
 
 ## Próximos pasos
 
-1. Establecer roles con `Groups` y permisos finos.
-2. Implementar `PermissionRequiredMixin` y decoradores personalizados.
-3. Mejorar el carrito con Fetch API / AJAX para una experiencia SPA.
-4. Añadir validaciones completas de modelo y formulario.
-5. Extender el dashboard con alertas de stock y métricas.
+1. Completar roles y permisos con `Groups`.
+2. Refinar autorización con mixins y decoradores personalizados.
+3. Añadir gestión de stock avanzada en el dashboard.
+4. Mejorar validaciones y mensajes de usuario.
+5. Integrar acciones del carrito desde la página de producto.
 
 ## Cómo ejecutar
 
@@ -138,4 +146,4 @@ python manage.py runserver
 
 ## Observación
 
-Este README se actualizará a medida que el proyecto avance y se implementen nuevas capas y funcionalidades.
+Este README refleja el estado actual del proyecto y se actualizará conforme se agreguen nuevas funcionalidades.

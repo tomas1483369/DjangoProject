@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.db.models import Q
@@ -18,16 +18,11 @@ def dashboard(request):
     total_products = Producto.objects.activos().count()
     low_stock_products = Producto.objects.bajo_stock().count()
     out_of_stock_products = Producto.objects.agotados().count()
-    latest_products = Producto.objects.activos().order_by('-fecha_creacion')[:4]
-    latest_users = User.objects.order_by('-date_joined')[:5]
-
     return render(request, 'dashboard.html', {
         'total_users': total_users,
         'total_products': total_products,
         'low_stock_products': low_stock_products,
         'out_of_stock_products': out_of_stock_products,
-        'latest_products': latest_products,
-        'latest_users': latest_users,
     })
 
 

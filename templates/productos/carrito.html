@@ -6,7 +6,7 @@
 <div class="container-cart">
     {% if items %}
         <div class="grid-cart">
-            <div class="card cart-card">
+            <div class="card cart-card" id="cart-checkout-panel">
                 <label class="title">CHECKOUT</label>
                 <div class="steps">
                     <div class="step">
@@ -37,42 +37,33 @@
                 </div>
             </div>
 
-            <div class="card items-card">
-                <label class="title">Tus Productos</label>
-                <div class="items-list">
-                    {% for item in items %}
-                        <div class="cart-item-card">
-                            <div class="cart-item-image-wrapper">
-                                {% if item.product.imagen %}
-                                    <img src="{{ item.product.imagen.url }}" alt="{{ item.product.nombre }}" class="cart-item-image">
-                                {% else %}
-                                    <div class="cart-item-image cart-item-placeholder">📦</div>
-                                {% endif %}
-                            </div>
-                            <div class="cart-item-details">
-                                <span class="cart-item-name">{{ item.product.nombre }}</span>
-                                <span class="cart-item-code">{{ item.product.codigo }}</span>
-                                <span class="cart-item-price">${{ item.product.precio|floatformat:2 }}</span>
-                            </div>
-                            <div class="cart-item-meta">
-                                <span class="cart-item-quantity">x{{ item.quantity }}</span>
-                                <span class="cart-item-subtotal">${{ item.subtotal|floatformat:2 }}</span>
-                                <form method="post" class="remove-item-form">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="action" value="remove">
-                                    <input type="hidden" name="product_id" value="{{ item.product.pk }}">
-                                    <button type="submit" class="btn btn-sm btn-outline-light remove-btn">Eliminar</button>
-                                </form>
-                            </div>
-                        </div>
-                    {% endfor %}
+            <div class="card cart-card empty-card d-none" id="cart-empty-state">
+                <label class="title">Carrito vacío</label>
+                <div class="steps">
+                    <div class="step">
+                        <p class="text-muted">No hay productos en el carrito. Agrega productos desde el catálogo.</p>
+                        <a href="{% url 'productos:catalogo' %}" class="checkout-btn">Volver al catálogo</a>
+                    </div>
                 </div>
-                <div class="footer-checkout">
+            </div>
+
+            <div class="card items-card" data-api-url="{% url 'productos:carrito_api' %}">
+                <form id="cart-api-form" class="d-none">
+                    {% csrf_token %}
+                </form>
+                <label class="title">Tus Productos</label>
+                <div class="items-list" id="cart-items">
+                    {% include 'productos/cart_items_fragment.html' %}
+                </div>
+                <div class="footer-checkout" id="cart-footer-checkout">
                     <div class="checkout-total">
                         <span class="total-label">Total a pagar</span>
-                        <span class="price">${{ total_amount|floatformat:2 }}</span>
+                        <span class="price" id="cart-total-amount">${{ total_amount|floatformat:2 }}</span>
                     </div>
-                    <a href="#" class="checkout-btn">Checkout</a>
+                    <div class="d-flex gap-2">
+                        <button id="clear-cart" type="button" class="btn btn-outline-light">Vaciar carrito</button>
+                        <a href="#" class="checkout-btn">Checkout</a>
+                    </div>
                 </div>
             </div>
         </div>
