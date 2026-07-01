@@ -14,6 +14,16 @@ class ProductoForm(forms.ModelForm):
                 'El nombre solo puede contener letras y espacios.',
             )
         ],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'input',
+                'placeholder': ' ',
+                'autocomplete': 'off',
+                'pattern': '^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$',
+                'title': 'Solo letras y espacios.',
+                'required': 'required',
+            }
+        ),
     )
 
     codigo = forms.CharField(
@@ -25,6 +35,16 @@ class ProductoForm(forms.ModelForm):
                 'El código debe tener formato PROD-0001.',
             )
         ],
+        widget=forms.TextInput(
+            attrs={
+                'class': 'input',
+                'placeholder': ' ',
+                'autocomplete': 'off',
+                'pattern': '^PROD-\\d{4}$',
+                'title': 'Formato PROD-0001.',
+                'required': 'required',
+            }
+        ),
     )
 
     class Meta:
@@ -61,13 +81,29 @@ class ProductoForm(forms.ModelForm):
                 }
             ),
             'precio': forms.NumberInput(
-                attrs={'class': 'input', 'placeholder': ' ', 'step': '0.01'}
+                attrs={
+                    'class': 'input',
+                    'placeholder': ' ',
+                    'step': '0.01',
+                    'min': '0.01',
+                    'required': 'required',
+                }
             ),
             'cantidad': forms.NumberInput(
-                attrs={'class': 'input', 'placeholder': ' '}
+                attrs={
+                    'class': 'input',
+                    'placeholder': ' ',
+                    'min': '0',
+                    'required': 'required',
+                }
             ),
             'stock_minimo': forms.NumberInput(
-                attrs={'class': 'input', 'placeholder': ' '}
+                attrs={
+                    'class': 'input',
+                    'placeholder': ' ',
+                    'min': '0',
+                    'required': 'required',
+                }
             ),
             'estado': forms.CheckboxInput(
                 attrs={'class': 'form-check-input'}

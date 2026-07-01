@@ -3,48 +3,55 @@ import re
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.core.validators import RegexValidator
+from django.core.validators import EmailValidator
+
+from .validators import password_validator, username_validator
 
 
 class UsuarioRegisterForm(UserCreationForm):
     username = forms.CharField(
         max_length=150,
         label='Usuario',
-        validators=[
-            RegexValidator(
-                r'^[A-Za-z0-9]+$',
-                'El usuario solo puede contener letras y números.',
-            )
-        ],
+        validators=[username_validator],
         widget=forms.TextInput(
             attrs={
                 'class': 'input',
                 'placeholder': ' ',
                 'autofocus': True,
                 'autocomplete': 'username',
+                'pattern': '^[A-Za-z0-9]+$',
+                'title': 'Solo letras y números.',
+                'inputmode': 'latin',
+                'required': 'required',
             }
         ),
     )
     email = forms.EmailField(
         required=True,
         label='Correo electrónico',
+        validators=[EmailValidator('Ingrese un correo electrónico válido.')],
         widget=forms.EmailInput(
             attrs={
                 'class': 'input',
                 'placeholder': ' ',
                 'autocomplete': 'email',
+                'required': 'required',
             }
         ),
     )
     password1 = forms.CharField(
         label='Contraseña',
         strip=False,
-        help_text='Mínimo 8 caracteres, al menos una letra y un número.',
+        help_text='Mínimo 8 caracteres, incluyendo mayúscula, minúscula, número y carácter especial.',
+        validators=[password_validator],
         widget=forms.PasswordInput(
             attrs={
                 'class': 'input',
                 'placeholder': ' ',
                 'autocomplete': 'new-password',
+                'pattern': '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*\\W).{8,}$',
+                'title': 'Contraseña con 8+ caracteres, mayúscula, minúscula, número y carácter especial.',
+                'required': 'required',
             }
         ),
     )
@@ -56,6 +63,7 @@ class UsuarioRegisterForm(UserCreationForm):
                 'class': 'input',
                 'placeholder': ' ',
                 'autocomplete': 'new-password',
+                'required': 'required',
             }
         ),
     )
@@ -75,8 +83,14 @@ class UsuarioRegisterForm(UserCreationForm):
         if password1:
             if len(password1) < 8:
                 raise forms.ValidationError('La contraseña debe tener al menos 8 caracteres.')
-            if not re.search(r'[A-Za-z]', password1) or not re.search(r'\d', password1):
-                raise forms.ValidationError('La contraseña debe incluir letras y números.')
+            if not re.search(r'[A-Z]', password1):
+                raise forms.ValidationError('La contraseña debe contener al menos una letra mayúscula.')
+            if not re.search(r'[a-z]', password1):
+                raise forms.ValidationError('La contraseña debe contener al menos una letra minúscula.')
+            if not re.search(r'\d', password1):
+                raise forms.ValidationError('La contraseña debe contener al menos un número.')
+            if not re.search(r'\W', password1):
+                raise forms.ValidationError('La contraseña debe contener al menos un carácter especial.')
         return password1
 
     def save(self, commit=True):
@@ -92,22 +106,30 @@ class UsuarioUpdateForm(forms.ModelForm):
     username = forms.CharField(
         max_length=150,
         label='Usuario',
+        validators=[username_validator],
         widget=forms.TextInput(
             attrs={
                 'class': 'input',
                 'placeholder': ' ',
                 'autocomplete': 'username',
+                'pattern': '^[A-Za-z0-9]+$',
+                'title': 'Solo letras y números.',
+                'inputmode': 'latin',
+                'required': 'required',
             }
         ),
     )
     email = forms.EmailField(
         required=True,
         label='Correo electrónico',
+        validators=[EmailValidator('Ingrese un correo electrónico válido.')],
         widget=forms.EmailInput(
             attrs={
                 'class': 'input',
                 'placeholder': ' ',
                 'autocomplete': 'email',
+                'required': 'required',
+                'inputmode': 'email',
             }
         ),
     )
