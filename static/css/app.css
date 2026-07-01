@@ -26,6 +26,7 @@ body {
   padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 2rem;
 }
 
@@ -56,6 +57,24 @@ body {
 .sidebar-link:hover {
   background: rgba(0, 191, 255, 0.1);
   border-color: #00bfff;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar-link-bottom {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: center;
+  width: 100%;
+}
+
+.sidebar-icon {
+  font-size: 1.5rem;
 }
 
 .main-shell {
@@ -108,6 +127,104 @@ body {
   .main-shell {
     width: 100%;
   }
+}
+
+.marketplace-card {
+  min-height: 460px;
+  border-radius: 24px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.marketplace-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.marketplace-card-link:hover .marketplace-card {
+  transform: translateY(-4px);
+}
+
+.marketplace-thumb {
+  min-height: 280px;
+  overflow: hidden;
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.marketplace-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.marketplace-placeholder {
+  width: 100%;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.marketplace-icon {
+  font-size: 5rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.marketplace-tag {
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.marketplace-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.marketplace-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.user-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.user-list-item {
+  border-radius: 18px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-row {
+  align-items: center;
+}
+
+.catalog-table thead {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.catalog-table th,
+.catalog-table td {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.catalog-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.03);
 }
 
 .form {

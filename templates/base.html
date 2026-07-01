@@ -12,25 +12,39 @@
     <div class="app-shell {% if user.is_authenticated %}authenticated{% endif %}">
         {% if user.is_authenticated %}
             <aside class="sidebar">
-                <div class="sidebar-brand">Inventario</div>
-                <nav class="sidebar-nav">
-                    <a href="{% url 'usuarios:dashboard' %}" class="sidebar-link">Inicio</a>
-                    <a href="{% url 'productos:catalogo' %}" class="sidebar-link">Catálogo</a>
-                    <a href="{% url 'usuarios:lista_usuarios' %}" class="sidebar-link">Usuarios</a>
-                </nav>
+                <div>
+                    <div class="sidebar-brand">Inventario</div>
+                    <nav class="sidebar-nav">
+                        <a href="{% url 'usuarios:dashboard' %}" class="sidebar-link">Inicio</a>
+                        <a href="{% url 'productos:catalogo' %}" class="sidebar-link">Catálogo</a>
+                        <a href="{% url 'usuarios:lista_usuarios' %}" class="sidebar-link">Usuarios</a>
+                    </nav>
+                </div>
+                <div class="sidebar-footer">
+                    <a href="{% url 'productos:carrito' %}" class="sidebar-link sidebar-link-bottom">
+                        <span class="sidebar-icon">🛒</span>
+                        Carrito
+                    </a>
+                </div>
             </aside>
         {% endif %}
         <div class="main-shell">
             <nav class="navbar navbar-expand-lg navbar-dark topbar">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="{% if user.is_authenticated %}{% url 'usuarios:dashboard' %}{% else %}{% url 'usuarios:login' %}{% endif %}">Inventario</a>
+                <div class="container-fluid justify-content-end">
                     <div class="d-flex align-items-center">
                         {% if user.is_authenticated %}
-                            <div class="user-badge">
-                                <span class="user-avatar">{{ user.username|slice:":1"|upper }}</span>
-                                <span class="user-name">{{ user.username }}</span>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="user-avatar">{{ user.username|slice:":1"|upper }}</span>
+                                    <span class="user-name">{{ user.username }}</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end mt-2">
+                                    <li><a class="dropdown-item" href="{% url 'usuarios:lista_usuarios' %}">Usuarios</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'productos:catalogo' %}">Catálogo</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="{% url 'usuarios:logout' %}">Cerrar sesión</a></li>
+                                </ul>
                             </div>
-                            <a class="btn btn-sm btn-outline-light ms-3" href="{% url 'usuarios:logout' %}">Cerrar sesión</a>
                         {% else %}
                             <a class="btn btn-sm btn-outline-light me-2" href="{% url 'usuarios:login' %}">Iniciar sesión</a>
                             <a class="btn btn-sm btn-primary" href="{% url 'usuarios:register' %}">Registrar</a>

@@ -37,6 +37,15 @@ def eliminar_producto(request, pk):
     return redirect(reverse('productos:catalogo'))
 
 
+def carrito(request):
+    return render(request, 'productos/carrito.html')
+
+
+def producto_detalle(request, pk):
+    producto = get_object_or_404(Producto, pk=pk, estado=True)
+    return render(request, 'productos/producto_detalle.html', {'product': producto})
+
+
 def catalogo(request):
     products = Producto.objects.filter(estado=True).order_by('-fecha_creacion')
     return render(request, 'catalogo.html', {'products': products})
