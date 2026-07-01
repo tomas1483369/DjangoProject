@@ -3,13 +3,14 @@
 {% block title %}Inicio{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
-    <div class="col-12 col-lg-10 col-xl-8">
-        <div class="card border-secondary bg-dark text-white shadow-lg p-6">
-            <p class="text-uppercase text-info small mb-3">Inventario inteligente</p>
-            <h1 class="display-4 fw-bold mb-4">Bienvenido al catálogo de productos</h1>
-            <p class="lead text-muted mb-5">Gestiona tu stock en un solo lugar, revisa alertas de stock bajo y explora los productos más recientes del inventario.</p>
-            <a href="http://127.0.0.1:8000/productos/catalogo/" class="submit btn-lg">Explorar catálogo</a>
+<div class="dashboard-background py-5">
+    <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+        <div class="col-12 col-lg-10 col-xl-8">
+            <div class="card border-0 bg-dark text-white shadow-lg p-6 dashboard-hero">
+                <h1 class="display-4 fw-bold mb-4">Bienvenido al catálogo de productos</h1>
+                <p class="lead text-muted mb-5">Gestiona tu stock en un solo lugar, revisa alertas de stock bajo y explora los productos más recientes del inventario.</p>
+                <a href="{% url 'productos:catalogo' %}" class="submit btn-lg">Explorar catálogo</a>
+            </div>
         </div>
     </div>
 </div>

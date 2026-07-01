@@ -3,6 +3,14 @@ body {
     color: #f8f9fa;
     min-height: 100vh;
 }
+.dashboard-background {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #191a1a;
+  background-image: linear-gradient(0deg, transparent 24%, rgba(114, 114, 114, 0.3) 25%, rgba(114, 114, 114, 0.3) 26%, transparent 27%, transparent 74%, rgba(114, 114, 114, 0.3) 75%, rgba(114, 114, 114, 0.3) 76%, transparent 77%, transparent),
+      linear-gradient(90deg, transparent 24%, rgba(114, 114, 114, 0.3) 25%, rgba(114, 114, 114, 0.3) 26%, transparent 27%, transparent 74%, rgba(114, 114, 114, 0.3) 75%, rgba(114, 114, 114, 0.3) 76%, transparent 77%, transparent);
+  background-size: 55px 55px;
+}
 .card {
     background-color: #141414;
     border-color: #2b2b2b;
@@ -75,6 +83,36 @@ body {
 
 .sidebar-icon {
   font-size: 1.5rem;
+}
+
+.dashboard-hero {
+  background-color: rgba(20, 20, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 30px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+}
+
+.form .form-check {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1rem 1rem 0.85rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  margin-bottom: 1rem;
+}
+
+.form .form-check-input {
+  width: 1.3em;
+  height: 1.3em;
+  margin-top: 0;
+  border-radius: 0.35rem;
+}
+
+.form .form-check-label {
+  color: #f8f9fa;
+  font-weight: 600;
 }
 
 .main-shell {
