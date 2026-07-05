@@ -1,7 +1,7 @@
 {% for product in products %}
 <div class="col">
     <a href="{% url 'productos:producto_detalle' product.pk %}" class="marketplace-card-link">
-        <div class="card h-100 border-secondary bg-dark text-white shadow-sm marketplace-card">
+        <div class="card h-100 border-secondary bg-dark text-white shadow-sm marketplace-card {% if product.is_out_of_stock %}out-stock{% elif product.is_low_stock %}low-stock{% endif %}">
             <div class="marketplace-thumb position-relative">
                 {% if product.imagen %}
                     <img src="{{ product.imagen.url }}" class="marketplace-image" alt="{{ product.nombre }}">
@@ -12,11 +12,7 @@
                 {% endif %}
                 <div class="d-flex justify-content-between align-items-start p-3 position-absolute top-0 start-0 end-0">
                     <span class="marketplace-tag badge bg-dark bg-opacity-75 text-white">{{ product.codigo }}</span>
-                    {% if product.cantidad == 0 %}
-                        <span class="badge bg-danger">Agotado</span>
-                    {% elif product.cantidad <= product.stock_minimo %}
-                        <span class="badge bg-warning text-dark">Bajo stock</span>
-                    {% endif %}
+                    <span class="{{ product.stock_badge_class }}">{{ product.stock_badge }}</span>
                 </div>
             </div>
             <div class="card-body marketplace-body">

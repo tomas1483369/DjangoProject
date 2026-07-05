@@ -55,3 +55,35 @@ class Producto(models.Model):
 
     def __str__(self):
         return f'{self.codigo} - {self.nombre}'
+
+    @property
+    def is_out_of_stock(self):
+        return self.cantidad == 0
+
+    @property
+    def is_low_stock(self):
+        return self.cantidad > 0 and self.cantidad <= self.stock_minimo
+
+    @property
+    def stock_status(self):
+        if self.is_out_of_stock:
+            return 'out_of_stock'
+        if self.is_low_stock:
+            return 'low_stock'
+        return 'available'
+
+    @property
+    def stock_badge(self):
+        if self.is_out_of_stock:
+            return 'Agotado'
+        if self.is_low_stock:
+            return 'Bajo stock'
+        return 'Disponible'
+
+    @property
+    def stock_badge_class(self):
+        if self.is_out_of_stock:
+            return 'badge bg-danger'
+        if self.is_low_stock:
+            return 'badge bg-warning text-dark'
+        return 'badge bg-success'

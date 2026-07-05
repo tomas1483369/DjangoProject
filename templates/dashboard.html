@@ -15,6 +15,24 @@
                         <a href="{% url 'productos:nuevo' %}" class="btn btn-outline-light btn-lg">Agregar producto</a>
                     {% endif %}
                 </div>
+                {% if low_stock_products or out_of_stock_products %}
+                    <div class="row g-3 mb-4">
+                        {% if low_stock_products %}
+                            <div class="col-12 col-md-6">
+                                <div class="dashboard-callout warning mb-0">
+                                    <strong>{{ low_stock_products }}</strong> productos tienen stock bajo.
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if out_of_stock_products %}
+                            <div class="col-12 col-md-6">
+                                <div class="dashboard-callout danger mb-0">
+                                    <strong>{{ out_of_stock_products }}</strong> productos están agotados.
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
                 <div class="row g-4">
                     <div class="col-12 col-md-4">
                         <div class="card card-dark p-4 h-100">
@@ -36,42 +54,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="row gx-4 gy-4 mt-4">
-        <div class="col-12 col-lg-6">
-            <div class="card card-dark p-4 h-100">
-                <h5 class="mb-3">Últimos productos</h5>
-                <ul class="list-group list-group-flush">
-                    {% for product in latest_products %}
-                        <li class="list-group-item bg-dark text-white border-secondary">
-                            <strong>{{ product.nombre }}</strong>
-                            <span class="text-muted d-block">{{ product.codigo }} · {{ product.cantidad }} en stock</span>
-                        </li>
-                    {% empty %}
-                        <li class="list-group-item bg-dark text-white border-secondary">No hay productos recientes.</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="col-12 col-lg-6">
-            <div class="card card-dark p-4 h-100">
-                <h5 class="mb-3">Últimos usuarios</h5>
-                <ul class="list-group list-group-flush">
-                    {% for user in latest_users %}
-                        <li class="list-group-item bg-dark text-white border-secondary">
-                            <strong>{{ user.username }}</strong>
-                            <span class="text-muted d-block">{{ user.email }}</span>
-                        </li>
-                    {% empty %}
-                        <li class="list-group-item bg-dark text-white border-secondary">No hay usuarios recientes.</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
         </div>
     </div>
 </div>
